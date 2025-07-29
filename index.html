@@ -303,17 +303,43 @@
             
             .inspiration-box,
             .main-content {
-                padding: 20px;
+                padding: 25px;
                 border-radius: 15px;
+            }
+            
+            .inspiration-box {
+                min-height: 240px;
             }
             
             h1 {
                 font-size: 2rem;
             }
             
+            .inspiration-title {
+                font-size: 1.4rem;
+            }
+            
             .inspiration-content {
-                font-size: 1rem;
-                min-height: 100px;
+                font-size: 1.1rem;
+                min-height: 120px;
+            }
+            
+            .inspiration-source {
+                font-size: 0.9rem;
+            }
+            
+            .refresh-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .progress-dots {
+                gap: 6px;
+            }
+            
+            .progress-dot {
+                width: 6px;
+                height: 6px;
             }
         }
 
@@ -348,13 +374,27 @@
             </div>
             <div class="inspiration-source">—《达摩法则》</div>
             <button class="refresh-btn" onclick="showRandomInspiration()">获取新的启发</button>
+            
+            <!-- 进度条 -->
+            <div class="progress-container">
+                <div class="progress-dots" id="progressDots">
+                    <div class="progress-dot active"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                </div>
+            </div>
         </div>
 
         <!-- 主要内容 -->
         <div class="main-content">
             <h1>七大灵性法则</h1>
 
-            <h2>1. 纯粹潜能法则</h2>
+            <h2>1. 实践纯粹潜能法则</h2>
             <ol>
                 <li>
                     <strong>保持静默</strong><br>
@@ -371,7 +411,7 @@
                 </li>
             </ol>
 
-            <h2>2. 施予法则</h2>
+            <h2>2. 实践施予法则</h2>
             <ol>
                 <li>
                     <strong>随身携带礼物</strong><br>
@@ -387,7 +427,7 @@
                 </li>
             </ol>
 
-            <h2>3. 因果法则</h2>
+            <h2>3. 实践因果法则</h2>
             <ol>
                 <li>
                     <strong>见证每一次选择</strong><br>
@@ -403,7 +443,7 @@
                 </li>
             </ol>
 
-            <h2>4. 最省力法则</h2>
+            <h2>4. 实践最省力法则</h2>
             <ol>
                 <li>
                     <strong>全面接纳</strong><br>
@@ -419,7 +459,7 @@
                 </li>
             </ol>
 
-            <h2>5. 意图与愿望法则</h2>
+            <h2>5. 实践意图与愿望法则</h2>
             <ol>
                 <li>
                     <strong>随身携带愿望清单</strong><br>
@@ -435,7 +475,7 @@
                 </li>
             </ol>
 
-            <h2>6. 超然法则</h2>
+            <h2>6. 实践超然法则</h2>
             <ol>
                 <li>
                     <strong>致力于超然</strong><br>
@@ -451,7 +491,7 @@
                 </li>
             </ol>
 
-            <h2>7. 达摩法则</h2>
+            <h2>7. 实践达摩法则</h2>
             <ol>
                 <li>
                     <strong>培养神圣原型</strong><br>
@@ -470,7 +510,7 @@
     </div>
 
     <script>
-        // 灵性启发内容数组
+        // ===== 全局变量和数据 =====
         const inspirations = [
             {
                 title: "培养神圣原型",
@@ -479,7 +519,7 @@
             },
             {
                 title: "保持静默",
-                content: "我每天会花时间进入完全"心无杂念"的静默状态，以此探寻纯粹潜能的场域。在静默中，我发现生命的无限可能性。",
+                content: "我每天会花时间进入完全'心无杂念'的静默状态，以此探寻纯粹潜能的场域。在静默中，我发现生命的无限可能性。",
                 source: "《纯粹潜能法则》"
             },
             {
@@ -499,7 +539,7 @@
             },
             {
                 title: "全面接纳",
-                content: "今天我会接纳所有人、所有事、环境以及发生的一切。我明白"此时此刻本该如此"，因为宇宙就是如此。",
+                content: "今天我会接纳所有人、所有事、环境以及发生的一切。我明白'此时此刻本该如此'，因为宇宙就是如此。",
                 source: "《最省力法则》"
             },
             {
@@ -516,12 +556,129 @@
 
         let currentTheme = 'light';
         let currentInspiration = 0;
+        let shuffledOrder = [];
+        let currentRoundIndex = 0;
+        let autoRotationInterval = null;
 
-        // 初始化页面
-        function initializePage() {
-            detectTimeAndSetTheme();
-            createFloatingElements();
-            startAutoRotation();
+        // ===== 全局函数（可被HTML调用）=====
+        
+        // 主题切换功能
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.body.classList.toggle('dark-mode');
+            
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.textContent = currentTheme === 'light' ? '🌙' : '☀️';
+            }
+            
+            // 保存主题设置
+            localStorage.setItem('theme', currentTheme);
+        }
+
+        // 手动显示随机启发内容（用于按钮点击）
+        function showRandomInspiration() {
+            showNextInspiration();
+        }
+
+        // ===== 辅助函数 =====
+        
+        // 洗牌函数 - Fisher-Yates算法
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // 初始化洗牌顺序
+        function initializeShuffledOrder() {
+            const indices = inspirations.map((_, index) => index);
+            shuffledOrder = shuffleArray(indices);
+            currentRoundIndex = 0;
+        }
+
+        // 更新进度条
+        function updateProgressBar() {
+            const progressDots = document.querySelectorAll('.progress-dot');
+            if (progressDots.length === 0) return;
+            
+            // 清除所有活跃状态
+            progressDots.forEach(dot => dot.classList.remove('active'));
+            
+            // 确保索引在有效范围内
+            if (currentRoundIndex >= 0 && currentRoundIndex < progressDots.length) {
+                progressDots[currentRoundIndex].classList.add('active');
+            }
+        }
+
+        // 显示当前启发内容
+        function displayCurrentInspiration() {
+            const inspirationTitle = document.getElementById('inspirationTitle');
+            const inspirationContent = document.getElementById('inspirationContent');
+            
+            if (!inspirationTitle || !inspirationContent) return;
+            
+            // 确保数据完整性
+            if (!shuffledOrder || shuffledOrder.length === 0 || 
+                currentRoundIndex < 0 || currentRoundIndex >= shuffledOrder.length) {
+                console.warn('轮播数据异常，重新初始化');
+                initializeShuffledOrder();
+                return;
+            }
+            
+            // 添加淡出效果
+            inspirationContent.style.opacity = '0';
+            
+            setTimeout(() => {
+                try {
+                    const currentIndex = shuffledOrder[currentRoundIndex];
+                    const inspiration = inspirations[currentIndex];
+                    
+                    if (!inspiration) {
+                        console.error('无法找到启发内容，索引:', currentIndex);
+                        return;
+                    }
+                    
+                    inspirationTitle.textContent = inspiration.title;
+                    inspirationContent.textContent = inspiration.content;
+                    
+                    // 更新进度条
+                    updateProgressBar();
+                    
+                    // 添加淡入效果
+                    inspirationContent.style.animation = 'none';
+                    inspirationContent.offsetHeight; // 触发重排
+                    inspirationContent.style.animation = 'fadeInUp 1s ease forwards';
+                } catch (error) {
+                    console.error('显示启发内容时出错:', error);
+                    // 重新初始化并重试
+                    initializeShuffledOrder();
+                    if (shuffledOrder.length > 0) {
+                        displayCurrentInspiration();
+                    }
+                }
+            }, 300);
+        }
+
+        // 显示下一个启发内容（按洗牌顺序）
+        function showNextInspiration() {
+            // 确保初始化完成
+            if (!shuffledOrder || shuffledOrder.length === 0) {
+                initializeShuffledOrder();
+            }
+            
+            currentRoundIndex++;
+            
+            // 如果完成了一轮，重新洗牌开始新一轮
+            if (currentRoundIndex >= shuffledOrder.length) {
+                console.log('完成一轮，开始新一轮');
+                initializeShuffledOrder();
+            }
+            
+            displayCurrentInspiration();
         }
 
         // 根据时间自动设置主题
@@ -534,50 +691,23 @@
             }
         }
 
-        // 主题切换功能
-        function toggleTheme() {
-            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-            document.body.classList.toggle('dark-mode');
-            
-            const themeToggle = document.getElementById('themeToggle');
-            themeToggle.textContent = currentTheme === 'light' ? '🌙' : '☀️';
-            
-            // 保存主题设置
-            localStorage.setItem('theme', currentTheme);
-        }
-
-        // 显示随机启发内容
-        function showRandomInspiration() {
-            const inspirationTitle = document.getElementById('inspirationTitle');
-            const inspirationContent = document.getElementById('inspirationContent');
-            
-            // 添加淡出效果
-            inspirationContent.style.opacity = '0';
-            
-            setTimeout(() => {
-                currentInspiration = Math.floor(Math.random() * inspirations.length);
-                const inspiration = inspirations[currentInspiration];
-                
-                inspirationTitle.textContent = inspiration.title;
-                inspirationContent.textContent = inspiration.content;
-                
-                // 添加淡入效果
-                inspirationContent.style.animation = 'none';
-                inspirationContent.offsetHeight; // 触发重排
-                inspirationContent.style.animation = 'fadeInUp 1s ease forwards';
-            }, 300);
-        }
-
         // 自动轮播启发内容
         function startAutoRotation() {
-            setInterval(() => {
-                showRandomInspiration();
+            // 清除之前的定时器（如果存在）
+            if (autoRotationInterval) {
+                clearInterval(autoRotationInterval);
+            }
+            
+            autoRotationInterval = setInterval(() => {
+                showNextInspiration();
             }, 15000); // 每15秒自动切换
         }
 
         // 创建装饰性浮动元素
         function createFloatingElements() {
             const container = document.getElementById('floatingElements');
+            if (!container) return;
+            
             const elementCount = 6;
             
             for (let i = 0; i < elementCount; i++) {
@@ -591,21 +721,44 @@
             }
         }
 
-        // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', initializePage);
-
-        // 检查是否有保存的主题设置
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            currentTheme = savedTheme;
-            if (currentTheme === 'dark') {
-                document.body.classList.add('dark-mode');
-                document.getElementById('themeToggle').textContent = '☀️';
-            }
+        // 初始化页面
+        function initializePage() {
+            detectTimeAndSetTheme();
+            createFloatingElements();
+            initializeShuffledOrder();
+            // 确保DOM元素已加载后再显示内容
+            setTimeout(() => {
+                displayCurrentInspiration(); // 显示第一条内容
+                startAutoRotation();
+            }, 100);
         }
 
-        // 每小时检查一次时间以自动切换主题
-        setInterval(detectTimeAndSetTheme, 3600000);
+        // ===== 页面初始化 =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查是否有保存的主题设置
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                currentTheme = savedTheme;
+                if (currentTheme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                    const themeToggle = document.getElementById('themeToggle');
+                    if (themeToggle) {
+                        themeToggle.textContent = '☀️';
+                    }
+                }
+            }
+            
+            // 初始化页面
+            initializePage();
+            
+            // 每小时检查一次时间以自动切换主题
+            setInterval(detectTimeAndSetTheme, 3600000);
+        });
+        
+        // ===== 全局作用域确认 =====
+        // 确保函数在全局作用域中
+        window.toggleTheme = toggleTheme;
+        window.showRandomInspiration = showRandomInspiration;
     </script>
 </body>
 </html>
