@@ -399,9 +399,9 @@
     <div class="container">
         <!-- 保持原有的轮播区域 -->
         <div class="inspiration-box">
-            <div class="inspiration-title" id="inspirationTitle">施予的循环</div>
-            <div class="inspiration-content" id="inspirationContent">无论去到哪里，无论遇到谁，我都将带给对方一份礼物。今天，无论接触到谁，我都会这样做，从而开启生命中喜悦、财富与富饶的循环。</div>
-            <div class="inspiration-source" id="inspirationSource">—《施予法则》</div>
+            <div class="inspiration-title" id="inspirationTitle"> </div>
+            <div class="inspiration-content" id="inspirationContent">正在加载今日的灵感...</div>
+            <div class="inspiration-source" id="inspirationSource"> </div>
             <button class="refresh-btn" onclick="showRandomInspiration()">✦</button>
             
             
@@ -706,14 +706,13 @@
             return shuffled;
         }
 
-        // 初始化洗牌顺序
-        function initializeShuffledOrder() {
+        // 初始化并开始一个全新的、随机打乱的轮播回合
+        function startNewShuffledRound() {
             const indices = inspirations.map((_, index) => index);
             shuffledOrder = shuffleArray(indices);
-            currentRoundIndex = 0;
+            currentRoundIndex = 0; // 新回合总是从头开始
+            console.log("新回合开始，顺序已重新洗牌。");
         }
-
-        
 
         // 显示当前启发内容
         function displayCurrentInspiration() {
@@ -726,9 +725,9 @@
             // 确保数据完整性
             if (!shuffledOrder || shuffledOrder.length === 0 || 
                 currentRoundIndex < 0 || currentRoundIndex >= shuffledOrder.length) {
-                console.warn('轮播数据异常，重新初始化');
-                initializeShuffledOrder();
-                return;
+                console.warn('轮播数据异常，开始新回合。');
+                startNewShuffledRound();
+                if (inspirations.length === 0) return;
             }
             
             // 添加淡出效果
@@ -740,7 +739,9 @@
                     const inspiration = inspirations[currentIndex];
                     
                     if (!inspiration) {
-                        console.error('无法找到启发内容，索引:', currentIndex);
+                        console.error('无法找到启发内容，索引:', currentIndex, '。开始新回合。');
+                        startNewShuffledRound();
+                        displayCurrentInspiration(); // 重新尝试显示
                         return;
                     }
                     
@@ -754,8 +755,7 @@
                     inspirationContent.style.animation = 'fadeInUp 1s ease forwards';
                 } catch (error) {
                     console.error('显示启发内容时出错:', error);
-                    // 重新初始化并重试
-                    initializeShuffledOrder();
+                    startNewShuffledRound();
                     if (shuffledOrder.length > 0) {
                         displayCurrentInspiration();
                     }
@@ -765,17 +765,11 @@
 
         // 显示下一个启发内容（按洗牌顺序）
         function showNextInspiration() {
-            // 确保初始化完成
-            if (!shuffledOrder || shuffledOrder.length === 0) {
-                initializeShuffledOrder();
-            }
-            
-            currentRoundIndex++;
-            
-            // 如果完成了一轮，重新洗牌开始新一轮
-            if (currentRoundIndex >= shuffledOrder.length) {
-                console.log('完成一轮，开始新一轮');
-                initializeShuffledOrder();
+            // 如果当前是最后一个，则开始新回合，否则递增索引
+            if (currentRoundIndex >= shuffledOrder.length - 1) {
+                startNewShuffledRound();
+            } else {
+                currentRoundIndex++;
             }
             
             displayCurrentInspiration();
@@ -793,14 +787,13 @@
 
         // 自动轮播启发内容
         function startAutoRotation() {
-            // 清除之前的定时器（如果存在）
             if (autoRotationInterval) {
                 clearInterval(autoRotationInterval);
             }
             
             autoRotationInterval = setInterval(() => {
                 showNextInspiration();
-            }, 15000); // 每15秒自动切换
+            }, 15000);
         }
 
         // 创建装饰性浮动元素
@@ -825,7 +818,12 @@
         function initializePage() {
             detectTimeAndSetTheme();
             createFloatingElements();
-            initializeShuffledOrder();
+            
+            // 开始第一回合
+            startNewShuffledRound();
+            // 为了实现刷新时的随机性，为第一回合随机选择一个起始点
+            currentRoundIndex = Math.floor(Math.random() * inspirations.length);
+            
             setTimeout(() => {
                 displayCurrentInspiration();
                 startAutoRotation();
