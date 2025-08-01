@@ -49,18 +49,27 @@
             padding: 20px;
         }
 
-        /* 随机播放窗口 */
+        /* 增强的随机播放窗口 - 主要变化在这里 */
         .inspiration-box {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
             border-radius: 20px;
-            padding: 30px;
+            /* 增加内边距，让空间更大 */
+            padding: 60px 40px;
             margin-bottom: 40px;
             box-shadow: var(--shadow);
             border: var(--border);
             text-align: center;
             position: relative;
             overflow: hidden;
+            /* 设置最小高度，让轮播区域占据更多屏幕空间 */
+            min-height: 70vh;
+            /* 使用flex布局让内容垂直居中分布 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
         }
 
         .inspiration-box::before {
@@ -83,27 +92,32 @@
             font-size: 1.5rem;
             font-weight: bold;
             color: var(--accent-color);
-            margin-bottom: 20px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* 保持原有的字体大小，但增加一些视觉重量 */
+            margin: 0;
         }
 
         .inspiration-content {
             font-size: 1.1rem;
             line-height: 1.8;
             font-style: italic;
-            margin-bottom: 15px;
-            min-height: 120px;
+            /* 增加最小高度，让内容区域更大 */
+            min-height: 180px;
+            max-width: 800px;
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             animation: fadeInUp 1s ease forwards;
+            /* 增加一些内边距让文字有更多呼吸空间 */
+            padding: 20px;
         }
 
         .inspiration-source {
             font-size: 0.9rem;
             color: var(--accent-color);
             font-weight: bold;
+            margin: 0;
         }
 
         @keyframes fadeInUp {
@@ -121,18 +135,67 @@
             background: var(--accent-color);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 15px 30px;
             border-radius: 25px;
             cursor: pointer;
             font-size: 0.9rem;
-            margin-top: 15px;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(159, 122, 234, 0.3);
+            /* 让按钮稍微大一点，但不改变字体 */
         }
 
         .refresh-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(159, 122, 234, 0.4);
+        }
+
+        /* 进度条样式 - 新增 */
+        .progress-container {
+            margin-top: 20px;
+        }
+
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(159, 122, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .progress-dot.active {
+            background: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        /* 向下滚动提示 - 新增 
+        .scroll-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--accent-color);
+            font-size: 0.8rem;
+            opacity: 0.7;
+            animation: bounce 2s infinite;
+        }
+        */
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
         }
 
         /* 主要内容区域 */
@@ -143,6 +206,8 @@
             padding: 40px;
             box-shadow: var(--shadow);
             border: var(--border);
+            /* 确保主内容在轮播下方有明显分界 */
+            margin-top: 60px;
         }
 
         h1 {
@@ -301,14 +366,16 @@
                 padding: 15px;
             }
             
-            .inspiration-box,
+            .inspiration-box {
+                padding: 40px 25px;
+                min-height: 60vh;
+                gap: 25px;
+            }
+            
             .main-content {
                 padding: 25px;
                 border-radius: 15px;
-            }
-            
-            .inspiration-box {
-                min-height: 240px;
+                margin-top: 40px;
             }
             
             h1 {
@@ -321,7 +388,8 @@
             
             .inspiration-content {
                 font-size: 1.1rem;
-                min-height: 120px;
+                min-height: 150px;
+                padding: 15px;
             }
             
             .inspiration-source {
@@ -329,7 +397,7 @@
             }
             
             .refresh-btn {
-                padding: 10px 20px;
+                padding: 12px 25px;
                 font-size: 0.9rem;
             }
             
@@ -356,22 +424,25 @@
             background: var(--accent-color);
             border-radius: 4px;
         }
+
+        /* 平滑滚动 */
+        html {
+            scroll-behavior: smooth;
+        }
     </style>
 </head>
-<body>
+<body class="dark-mode">
     <!-- 主题切换按钮 -->
-    <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">☀️</button>
 
     <!-- 装饰性浮动元素 -->
     <div class="floating-elements" id="floatingElements"></div>
 
     <div class="container">
-        <!-- 随机播放窗口 -->
+        <!-- 增强的随机播放窗口 -->
         <div class="inspiration-box">
-            <div class="inspiration-title" id="inspirationTitle">培养神圣原型</div>
-            <div class="inspiration-content" id="inspirationContent">
-                今天我将满怀爱意地培养藏在灵魂深处的神圣原型。我会关注自己内在的灵性，并赋予身体与心智以生命的灵性；我将唤醒内心的深沉静谧，在这有限的时光里怀抱超越时间、永恒存在的觉知。
-            </div>
+            <div class="inspiration-title" id="inspirationTitle">施予的循环</div>
+            <div class="inspiration-content" id="inspirationContent" style="opacity: 0; animation: 1s ease 0s 1 normal forwards running fadeInUp;">无论去到哪里，无论遇到谁，我都将带给对方一份礼物。今天，无论接触到谁，我都会这样做，从而开启生命中喜悦、财富与富饶的循环。</div>
             <div class="inspiration-source">—《达摩法则》</div>
             <button class="refresh-btn" onclick="showRandomInspiration()">获取新的启发</button>
             
@@ -388,6 +459,11 @@
                     <div class="progress-dot"></div>
                 </div>
             </div>
+
+            <!-- 滚动提示 
+            <div class="scroll-hint">
+                ↓ 向下滚动查看详细内容 ↓
+            </div>-->
         </div>
 
         <!-- 主要内容 -->
@@ -760,5 +836,6 @@
         window.toggleTheme = toggleTheme;
         window.showRandomInspiration = showRandomInspiration;
     </script>
+
 </body>
 </html>
