@@ -133,14 +133,14 @@
 
         .refresh-btn {
             background: transparent;
-            color: #FFD700; /* Gold color for the star */
-            text-shadow: 0 0 8px rgba(255, 215, 0, 0.7); /* Gold glow */
+            color: #FFD700;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
             border: none;
-            padding: 15px 30px; /* This padding defines the large clickable area */
+            padding: 15px 30px;
             border-radius: 25px;
             cursor: pointer;
-            font-size: 1.5rem; /* Increased size for the star */
-            line-height: 1; /* Adjust line height for better centering */
+            font-size: 1.5rem;
+            line-height: 1;
             transition: all 0.3s ease;
             box-shadow: none;
         }
@@ -150,7 +150,20 @@
             background: var(--hover-bg);
         }
 
-        
+        /* 进度指示器 */
+        .progress-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            font-weight: 500;
+        }
 
         /* 优化后的主要内容区域 */
         .main-content {
@@ -358,15 +371,6 @@
                 padding: 12px 25px;
                 font-size: 0.9rem;
             }
-            
-            .progress-dots {
-                gap: 6px;
-            }
-            
-            .progress-dot {
-                width: 6px;
-                height: 6px;
-            }
         }
 
         /* 滚动条样式 */
@@ -399,12 +403,15 @@
     <div class="container">
         <!-- 保持原有的轮播区域 -->
         <div class="inspiration-box">
-            <div class="inspiration-title" id="inspirationTitle"> </div>
-            <div class="inspiration-content" id="inspirationContent">正在加载今日的灵感...</div>
-            <div class="inspiration-source" id="inspirationSource"> </div>
+            <div class="inspiration-title" id="inspirationTitle">保持静默</div>
+            <div class="inspiration-content" id="inspirationContent">我每天会花时间进入完全"心无杂念"的静默状态，以此探寻纯粹潜能的场域。我还会独自静坐冥想，每天至少两次，早晚各约三十分钟。</div>
+            <div class="inspiration-source" id="inspirationSource">—《纯粹潜能法则》</div>
             <button class="refresh-btn" onclick="showRandomInspiration()">✦</button>
             
-            
+            <!-- 进度指示器 -->
+            <div class="progress-indicator">
+                <div class="progress-text" id="progressText">第 1 条 / 共 21 条</div>
+            </div>
         </div>
 
         <!-- 优化后的主要内容 -->
@@ -666,10 +673,68 @@
         ];
 
         let currentTheme = 'light';
-        let currentInspiration = 0;
-        let shuffledOrder = [];
-        let currentRoundIndex = 0;
+        let remainingInCurrentRound = []; // 当前回合剩余的内容索引
+        let currentInspirationIndex = -1;  // 当前显示的内容索引
         let autoRotationInterval = null;
+
+        // ===== 核心轮播逻辑 =====
+        
+        // 初始化新回合 - 重新填充剩余内容池
+        function initializeNewRound() {
+            remainingInCurrentRound = inspirations.map((_, index) => index);
+            console.log('新回合开始，包含21条内容');
+        }
+
+        // 从剩余池中随机选择一个内容
+        function getNextRandomInspiration() {
+            // 如果剩余池为空，开始新回合
+            if (remainingInCurrentRound.length === 0) {
+                initializeNewRound();
+            }
+
+            // 从剩余池中随机选择一个索引
+            const randomIndex = Math.floor(Math.random() * remainingInCurrentRound.length);
+            const selectedIndex = remainingInCurrentRound[randomIndex];
+            
+            // 从剩余池中移除已选择的索引
+            remainingInCurrentRound.splice(randomIndex, 1);
+            
+            currentInspirationIndex = selectedIndex;
+            
+            console.log(`选择了第${selectedIndex + 1}条内容，剩余${remainingInCurrentRound.length}条`);
+            
+            return inspirations[selectedIndex];
+        }
+
+        // 显示当前启发内容
+        function displayCurrentInspiration() {
+            const inspirationTitle = document.getElementById('inspirationTitle');
+            const inspirationContent = document.getElementById('inspirationContent');
+            const inspirationSource = document.getElementById('inspirationSource');
+            const progressText = document.getElementById('progressText');
+            
+            if (!inspirationTitle || !inspirationContent || !inspirationSource || !progressText) return;
+            
+            const inspiration = getNextRandomInspiration();
+            
+            // 添加淡出效果
+            inspirationContent.style.opacity = '0';
+            
+            setTimeout(() => {
+                inspirationTitle.textContent = inspiration.title;
+                inspirationContent.textContent = inspiration.content;
+                inspirationSource.textContent = '—' + inspiration.source;
+                
+                // 更新进度显示
+                const totalShown = inspirations.length - remainingInCurrentRound.length;
+                progressText.textContent = `第 ${totalShown} 条 / 共 ${inspirations.length} 条`;
+                
+                // 添加淡入效果
+                inspirationContent.style.animation = 'none';
+                inspirationContent.offsetHeight; // 触发重排
+                inspirationContent.style.animation = 'fadeInUp 1s ease forwards';
+            }, 300);
+        }
 
         // ===== 全局函数（可被HTML调用）=====
         
@@ -690,91 +755,12 @@
         // 手动显示随机启发内容（用于按钮点击）
         function showRandomInspiration() {
             // 立即显示下一个内容，并重置自动轮播计时器
-            showNextInspiration();
+            displayCurrentInspiration();
             startAutoRotation();
         }
 
         // ===== 辅助函数 =====
         
-        // 洗牌函数 - Fisher-Yates算法
-        function shuffleArray(array) {
-            const shuffled = [...array];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
-            return shuffled;
-        }
-
-        // 初始化并开始一个全新的、随机打乱的轮播回合
-        function startNewShuffledRound() {
-            const indices = inspirations.map((_, index) => index);
-            shuffledOrder = shuffleArray(indices);
-            currentRoundIndex = 0; // 新回合总是从头开始
-            console.log("新回合开始，顺序已重新洗牌。");
-        }
-
-        // 显示当前启发内容
-        function displayCurrentInspiration() {
-            const inspirationTitle = document.getElementById('inspirationTitle');
-            const inspirationContent = document.getElementById('inspirationContent');
-            const inspirationSource = document.getElementById('inspirationSource');
-            
-            if (!inspirationTitle || !inspirationContent || !inspirationSource) return;
-            
-            // 确保数据完整性
-            if (!shuffledOrder || shuffledOrder.length === 0 || 
-                currentRoundIndex < 0 || currentRoundIndex >= shuffledOrder.length) {
-                console.warn('轮播数据异常，开始新回合。');
-                startNewShuffledRound();
-                if (inspirations.length === 0) return;
-            }
-            
-            // 添加淡出效果
-            inspirationContent.style.opacity = '0';
-            
-            setTimeout(() => {
-                try {
-                    const currentIndex = shuffledOrder[currentRoundIndex];
-                    const inspiration = inspirations[currentIndex];
-                    
-                    if (!inspiration) {
-                        console.error('无法找到启发内容，索引:', currentIndex, '。开始新回合。');
-                        startNewShuffledRound();
-                        displayCurrentInspiration(); // 重新尝试显示
-                        return;
-                    }
-                    
-                    inspirationTitle.textContent = inspiration.title;
-                    inspirationContent.textContent = inspiration.content;
-                    inspirationSource.textContent = '—' + inspiration.source;
-                    
-                    // 添加淡入效果
-                    inspirationContent.style.animation = 'none';
-                    inspirationContent.offsetHeight; // 触发重排
-                    inspirationContent.style.animation = 'fadeInUp 1s ease forwards';
-                } catch (error) {
-                    console.error('显示启发内容时出错:', error);
-                    startNewShuffledRound();
-                    if (shuffledOrder.length > 0) {
-                        displayCurrentInspiration();
-                    }
-                }
-            }, 300);
-        }
-
-        // 显示下一个启发内容（按洗牌顺序）
-        function showNextInspiration() {
-            // 如果当前是最后一个，则开始新回合，否则递增索引
-            if (currentRoundIndex >= shuffledOrder.length - 1) {
-                startNewShuffledRound();
-            } else {
-                currentRoundIndex++;
-            }
-            
-            displayCurrentInspiration();
-        }
-
         // 根据时间自动设置主题
         function detectTimeAndSetTheme() {
             const hour = new Date().getHours();
@@ -792,7 +778,7 @@
             }
             
             autoRotationInterval = setInterval(() => {
-                showNextInspiration();
+                displayCurrentInspiration();
             }, 15000);
         }
 
@@ -819,10 +805,8 @@
             detectTimeAndSetTheme();
             createFloatingElements();
             
-            // 开始第一回合
-            startNewShuffledRound();
-            // 为了实现刷新时的随机性，为第一回合随机选择一个起始点
-            currentRoundIndex = Math.floor(Math.random() * inspirations.length);
+            // 初始化轮播系统
+            initializeNewRound();
             
             setTimeout(() => {
                 displayCurrentInspiration();
