@@ -6,124 +6,365 @@
     <title>七大灵性法则</title>
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         :root {
-            --primary-color: #4a5568;
-            --secondary-color: #2d3748;
-            --accent-color: #9f7aea;
-            --text-color: #2d3748;
-            --bg-color: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-            --border: 1px solid rgba(255, 255, 255, 0.18);
-            --light-bg: rgba(255, 255, 255, 0.8);
-            --light-bg-hover: rgba(255, 255, 255, 0.95);
-            --hover-bg: rgba(159, 122, 234, 0.1);
+            color-scheme: light;
+            --page: #f4efe4;
+            --paper: #fffaf0;
+            --paper-muted: #efe6d3;
+            --ink: #202820;
+            --muted: #6a7167;
+            --line: rgba(32, 40, 32, 0.14);
+            --line-strong: rgba(32, 40, 32, 0.26);
+            --jade: #2f665f;
+            --jade-deep: #183d39;
+            --moss: #7d8a54;
+            --gold: #b78a37;
+            --clay: #b16d4a;
+            --shadow: 0 24px 70px rgba(43, 50, 39, 0.14);
+            --soft-shadow: 0 12px 36px rgba(43, 50, 39, 0.10);
         }
 
-        .dark-mode {
-            --primary-color: #e2e8f0;
-            --secondary-color: #f7fafc;
-            --accent-color: #b794f6;
-            --text-color: #f7fafc;
-            --bg-color: linear-gradient(135deg, #0c4a6e 0%, #1e293b 100%);
-            --card-bg: rgba(30, 41, 59, 0.95);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            --border: 1px solid rgba(148, 163, 184, 0.18);
-            --light-bg: rgba(30, 41, 59, 0.8);
-            --light-bg-hover: rgba(42, 53, 71, 0.9);
-            --hover-bg: rgba(183, 148, 246, 0.15);
+        :root[data-theme="dark"] {
+            color-scheme: dark;
+            --page: #131915;
+            --paper: #1e261f;
+            --paper-muted: #263026;
+            --ink: #f2eadb;
+            --muted: #bdc3b6;
+            --line: rgba(242, 234, 219, 0.14);
+            --line-strong: rgba(242, 234, 219, 0.26);
+            --jade: #8fc9bc;
+            --jade-deep: #d9eadf;
+            --moss: #aeb87a;
+            --gold: #d8ad5b;
+            --clay: #d59675;
+            --shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+            --soft-shadow: 0 12px 36px rgba(0, 0, 0, 0.24);
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Georgia', serif;
-            line-height: 1.8;
-            color: var(--text-color);
-            background: var(--bg-color);
-            background-attachment: fixed;
             min-height: 100vh;
-            transition: all 0.5s ease;
+            background:
+                radial-gradient(circle at top left, rgba(183, 138, 55, 0.13), transparent 30rem),
+                linear-gradient(180deg, var(--page), var(--paper-muted));
+            color: var(--ink);
+            font-family: "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
+            line-height: 1.75;
+            text-rendering: optimizeLegibility;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
-        .container {
-            max-width: 1200px;
+        button {
+            font: inherit;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            border-bottom: 1px solid var(--line);
+            background: color-mix(in srgb, var(--page) 88%, transparent);
+            backdrop-filter: blur(18px);
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: min(1180px, calc(100% - 32px));
+            min-height: 68px;
             margin: 0 auto;
-            padding: 20px;
+            gap: 18px;
         }
 
-        /* 保持原有的轮播样式 */
-        .inspiration-box {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 60px 40px;
-            margin-bottom: 40px;
-            box-shadow: var(--shadow);
-            border: var(--border);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            min-height: 70vh;
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--jade-deep);
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            display: grid;
+            width: 34px;
+            height: 34px;
+            place-items: center;
+            border: 1px solid var(--line-strong);
+            border-radius: 50%;
+            color: var(--gold);
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .brand-text {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
+            gap: 2px;
         }
 
-        .inspiration-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            animation: shimmer 3s infinite;
+        .brand-title {
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.2;
         }
 
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
+        .brand-subtitle {
+            color: var(--muted);
+            font-family: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-size: 0.72rem;
+            line-height: 1.2;
         }
 
-        .inspiration-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--accent-color);
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin: 0;
-        }
-
-        .inspiration-content {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            font-style: italic;
-            min-height: 180px;
-            max-width: 800px;
+        .header-actions {
             display: flex;
             align-items: center;
+            gap: 10px;
+        }
+
+        .quiet-button,
+        .theme-toggle {
+            display: inline-flex;
+            align-items: center;
             justify-content: center;
-            opacity: 0;
-            animation: fadeInUp 1s ease forwards;
-            padding: 20px;
+            min-height: 42px;
+            border: 1px solid var(--line-strong);
+            border-radius: 8px;
+            background: color-mix(in srgb, var(--paper) 82%, transparent);
+            color: var(--jade-deep);
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
         }
 
-        .inspiration-source {
+        .quiet-button {
+            gap: 8px;
+            padding: 0 16px;
+            font-family: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
             font-size: 0.9rem;
-            color: var(--accent-color);
-            font-weight: bold;
-            margin: 0;
+            font-weight: 650;
         }
 
-        @keyframes fadeInUp {
+        .theme-toggle {
+            width: 42px;
+            padding: 0;
+            font-size: 1.1rem;
+        }
+
+        .quiet-button:hover,
+        .theme-toggle:hover {
+            transform: translateY(-1px);
+            border-color: var(--gold);
+            background: var(--paper);
+        }
+
+        .hero {
+            position: relative;
+            isolation: isolate;
+            min-height: calc(100vh - 128px);
+            overflow: hidden;
+            border-bottom: 1px solid var(--line);
+            background-image:
+                linear-gradient(90deg, rgba(19, 25, 21, 0.82), rgba(19, 25, 21, 0.38) 54%, rgba(19, 25, 21, 0.08)),
+                url("assets/still-water-hero.png");
+            background-position: center;
+            background-size: cover;
+            color: #fffaf0;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: auto 0 0;
+            z-index: -1;
+            height: 42%;
+            background: linear-gradient(180deg, transparent, rgba(19, 25, 21, 0.44));
+        }
+
+        .hero-inner {
+            display: grid;
+            grid-template-columns: minmax(0, 1.05fr) minmax(310px, 0.65fr);
+            align-items: center;
+            gap: 46px;
+            width: min(1180px, calc(100% - 32px));
+            min-height: inherit;
+            margin: 0 auto;
+            padding: 56px 0 64px;
+        }
+
+        .hero-copy {
+            max-width: 720px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+            color: rgba(255, 250, 240, 0.82);
+            font-family: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-size: 0.86rem;
+            font-weight: 700;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 38px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        h1 {
+            max-width: 10em;
+            color: #fffaf0;
+            font-size: 3.75rem;
+            font-weight: 800;
+            letter-spacing: 0;
+            line-height: 1.04;
+            text-wrap: balance;
+        }
+
+        .hero-lede {
+            max-width: 36em;
+            margin-top: 24px;
+            color: rgba(255, 250, 240, 0.82);
+            font-size: 1.13rem;
+            line-height: 1.9;
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 30px;
+            font-family: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        .meta-pill {
+            border: 1px solid rgba(255, 250, 240, 0.28);
+            border-radius: 999px;
+            padding: 7px 13px;
+            background: rgba(255, 250, 240, 0.10);
+            color: rgba(255, 250, 240, 0.86);
+            font-size: 0.84rem;
+            font-weight: 650;
+        }
+
+        .daily-panel {
+            border: 1px solid rgba(255, 250, 240, 0.24);
+            border-radius: 8px;
+            background: rgba(255, 250, 240, 0.88);
+            box-shadow: var(--shadow);
+            color: #202820;
+            overflow: hidden;
+        }
+
+        :root[data-theme="dark"] .daily-panel {
+            background: rgba(30, 38, 31, 0.90);
+            color: var(--ink);
+        }
+
+        .daily-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 20px 22px;
+            border-bottom: 1px solid var(--line);
+            font-family: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        .daily-label {
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-weight: 750;
+        }
+
+        .daily-count {
+            color: var(--jade);
+            font-size: 0.78rem;
+            font-weight: 750;
+        }
+
+        .daily-body {
+            padding: 28px 26px 26px;
+        }
+
+        .daily-law {
+            color: var(--gold);
+            font-family: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-size: 0.86rem;
+            font-weight: 800;
+        }
+
+        .daily-title {
+            margin-top: 10px;
+            color: var(--jade-deep);
+            font-size: 1.7rem;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        .daily-quote {
+            min-height: 8.5em;
+            margin-top: 18px;
+            color: var(--ink);
+            font-size: 1.05rem;
+            line-height: 1.95;
+        }
+
+        .daily-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin-top: 26px;
+        }
+
+        .law-tabs {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-top: 26px;
+        }
+
+        .law-tab {
+            min-width: 0;
+            height: 44px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: color-mix(in srgb, var(--paper) 78%, transparent);
+            color: var(--muted);
+            cursor: pointer;
+            font-family: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-size: 0.9rem;
+            font-weight: 800;
+            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .law-tab:hover,
+        .law-tab.is-active {
+            border-color: var(--gold);
+            background: color-mix(in srgb, var(--gold) 16%, var(--paper));
+            color: var(--jade-deep);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.34s ease both;
+        }
+
+        @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(8px);
             }
             to {
                 opacity: 1;
@@ -131,711 +372,629 @@
             }
         }
 
-        .refresh-btn {
-            background: transparent;
-            color: #FFD700;
-            text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1.5rem;
-            line-height: 1;
-            transition: all 0.3s ease;
-            box-shadow: none;
+        .content-band {
+            padding: 64px 0 80px;
         }
 
-        .refresh-btn:hover {
-            transform: translateY(-2px) scale(1.1);
-            background: var(--hover-bg);
+        .section-inner {
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto;
         }
 
-        /* 进度指示器 */
-        .progress-indicator {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .progress-text {
-            font-size: 0.9rem;
-            color: var(--accent-color);
-            font-weight: 500;
-        }
-
-        /* 优化后的主要内容区域 */
-        .main-content {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: var(--shadow);
-            border: var(--border);
-            margin-top: 60px;
-        }
-
-        .main-title {
-            text-align: center;
-            font-size: 2.5rem;
-            color: var(--accent-color);
-            margin-bottom: 50px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        /* 新的卡片网格布局 */
-        .laws-grid {
+        .section-heading {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
+            grid-template-columns: minmax(0, 0.72fr) minmax(280px, 0.28fr);
+            gap: 40px;
+            align-items: end;
+            margin-bottom: 30px;
         }
 
-        .law-card {
-            background: var(--light-bg);
-            border-radius: 15px;
-            padding: 30px;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            position: relative;
+        .section-kicker {
+            color: var(--gold);
+            font-family: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-size: 0.82rem;
+            font-weight: 800;
         }
 
-        .law-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(159, 122, 234, 0.2);
-            background: var(--light-bg-hover);
+        .section-title {
+            margin-top: 8px;
+            color: var(--jade-deep);
+            font-size: 2.35rem;
+            font-weight: 800;
+            letter-spacing: 0;
+            line-height: 1.15;
         }
 
-        .law-number {
-            position: absolute;
-            top: -15px;
-            left: 30px;
-            background: var(--accent-color);
-            color: white;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.1rem;
+        .section-note {
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.8;
         }
 
-        .law-title {
-            font-size: 1.4rem;
-            color: var(--accent-color);
-            margin-bottom: 25px;
-            padding-top: 10px;
-            font-weight: 600;
+        .laws-list {
+            display: grid;
+            gap: 18px;
         }
 
-        .practices-list {
-            space-y: 20px;
+        .law-detail {
+            display: grid;
+            grid-template-columns: 260px minmax(0, 1fr);
+            gap: 28px;
+            border-top: 1px solid var(--line-strong);
+            padding: 30px 0;
         }
 
-        .practice-item {
-            background: var(--hover-bg);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
-            position: relative;
-            overflow: hidden;
+        .law-summary {
+            position: sticky;
+            top: 96px;
+            align-self: start;
         }
 
-        .practice-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 4px;
-            height: 100%;
-            background-color: var(--accent-color);
-            transform: translateX(-100%);
-            transition: transform 0.3s ease-in-out;
+        .law-index {
+            color: var(--gold);
+            font-family: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-size: 0.84rem;
+            font-weight: 800;
         }
 
-        .law-card:hover .practice-item::before {
-            transform: translateX(0);
+        .law-name {
+            margin-top: 8px;
+            color: var(--jade-deep);
+            font-size: 1.55rem;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        .law-essence {
+            margin-top: 14px;
+            color: var(--muted);
+            font-size: 0.98rem;
+        }
+
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .practice-card {
+            min-height: 100%;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: color-mix(in srgb, var(--paper) 88%, transparent);
+            box-shadow: var(--soft-shadow);
+            padding: 22px;
+        }
+
+        .practice-step {
+            color: var(--clay);
+            font-family: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-size: 0.76rem;
+            font-weight: 800;
         }
 
         .practice-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--accent-color);
-            margin-bottom: 10px;
+            margin-top: 10px;
+            color: var(--jade-deep);
+            font-size: 1.16rem;
+            font-weight: 800;
+            line-height: 1.35;
         }
 
         .practice-content {
-            font-size: 1rem;
-            line-height: 1.7;
-            color: var(--text-color);
+            margin-top: 12px;
+            color: var(--ink);
+            font-size: 0.98rem;
+            line-height: 1.82;
         }
 
-        /* 主题切换按钮 */
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(159, 122, 234, 0.3);
-            z-index: 1000;
+        .site-footer {
+            border-top: 1px solid var(--line);
+            padding: 28px 0;
+            color: var(--muted);
+            font-family: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-size: 0.86rem;
         }
 
-        .theme-toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(159, 122, 234, 0.4);
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto;
         }
 
-        /* 装饰性元素 */
-        .floating-elements {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .floating-element {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: var(--accent-color);
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
-
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .inspiration-box {
-                padding: 40px 25px;
-                min-height: 60vh;
-                gap: 25px;
-            }
-            
-            .main-content {
-                padding: 25px;
-                border-radius: 15px;
-                margin-top: 40px;
-            }
-            
-            .main-title {
-                font-size: 2rem;
-            }
-            
-            .laws-grid {
+        @media (max-width: 940px) {
+            .hero-inner,
+            .section-heading,
+            .law-detail {
                 grid-template-columns: 1fr;
-                gap: 20px;
             }
-            
-            .law-card {
-                padding: 25px;
+
+            .hero-inner {
+                align-items: start;
+                gap: 28px;
+                padding-top: 44px;
             }
-            
-            .inspiration-title {
-                font-size: 1.4rem;
+
+            .law-summary {
+                position: static;
             }
-            
-            .inspiration-content {
-                font-size: 1.1rem;
-                min-height: 150px;
-                padding: 15px;
-            }
-            
-            .inspiration-source {
-                font-size: 0.9rem;
-            }
-            
-            .refresh-btn {
-                padding: 12px 25px;
-                font-size: 0.9rem;
+
+            .practice-grid {
+                grid-template-columns: 1fr;
             }
         }
 
-        /* 滚动条样式 */
-        ::-webkit-scrollbar {
-            width: 8px;
+        @media (max-width: 640px) {
+            .header-inner {
+                width: min(100% - 24px, 1180px);
+                min-height: 60px;
+            }
+
+            .brand-subtitle,
+            .header-actions .quiet-button .button-text {
+                display: none;
+            }
+
+            .quiet-button,
+            .theme-toggle {
+                width: 40px;
+                min-height: 40px;
+                padding: 0;
+            }
+
+            .hero {
+                min-height: auto;
+            }
+
+            .hero-inner,
+            .section-inner,
+            .footer-inner {
+                width: min(100% - 24px, 1180px);
+            }
+
+            .hero-inner {
+                padding: 34px 0 40px;
+            }
+
+            .eyebrow {
+                margin-bottom: 14px;
+                font-size: 0.8rem;
+            }
+
+            h1 {
+                font-size: 2.45rem;
+                line-height: 1.08;
+            }
+
+            .hero-lede {
+                margin-top: 18px;
+                font-size: 1rem;
+            }
+
+            .hero-meta {
+                margin-top: 22px;
+            }
+
+            .daily-panel-header {
+                padding: 16px 18px;
+            }
+
+            .daily-body {
+                padding: 22px 18px 20px;
+            }
+
+            .daily-title {
+                font-size: 1.42rem;
+            }
+
+            .daily-quote {
+                min-height: 0;
+                font-size: 1rem;
+                line-height: 1.9;
+            }
+
+            .daily-footer {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .daily-footer .quiet-button {
+                width: 100%;
+            }
+
+            .daily-footer .quiet-button .button-text {
+                display: inline;
+            }
+
+            .law-tabs {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 7px;
+            }
+
+            .law-tab {
+                height: 40px;
+            }
+
+            .content-band {
+                padding: 42px 0 56px;
+            }
+
+            .section-heading {
+                gap: 14px;
+                margin-bottom: 18px;
+            }
+
+            .section-title {
+                font-size: 1.9rem;
+            }
+
+            .law-detail {
+                gap: 18px;
+                padding: 24px 0;
+            }
+
+            .practice-card {
+                padding: 18px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+            }
         }
 
-        ::-webkit-scrollbar-track {
-            background: rgba(159, 122, 234, 0.1);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent-color);
-            border-radius: 4px;
-        }
-
-        /* 平滑滚动 */
-        html {
-            scroll-behavior: smooth;
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.001ms !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.001ms !important;
+            }
         }
     </style>
 </head>
-<body class="dark-mode">
-    <!-- 主题切换按钮 -->
-    <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">☀️</button>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="#top" aria-label="七大灵性法则">
+                <span class="brand-mark" aria-hidden="true">七</span>
+                <span class="brand-text">
+                    <span class="brand-title">七大灵性法则</span>
+                    <span class="brand-subtitle">Seven Spiritual Laws</span>
+                </span>
+            </a>
 
-    <!-- 装饰性浮动元素 -->
-    <div class="floating-elements" id="floatingElements"></div>
-
-    <div class="container">
-        <!-- 保持原有的轮播区域 -->
-        <div class="inspiration-box">
-            <div class="inspiration-title" id="inspirationTitle">保持静默</div>
-            <div class="inspiration-content" id="inspirationContent">我每天会花时间进入完全"心无杂念"的静默状态，以此探寻纯粹潜能的场域。我还会独自静坐冥想，每天至少两次，早晚各约三十分钟。</div>
-            <div class="inspiration-source" id="inspirationSource">—《纯粹潜能法则》</div>
-            <button class="refresh-btn" onclick="showRandomInspiration()">✦</button>
-            
-            <!-- 进度指示器 -->
-            <div class="progress-indicator">
-                <div class="progress-text" id="progressText">第 1 条 / 共 21 条</div>
+            <div class="header-actions">
+                <button class="quiet-button" type="button" id="nextHeaderButton" title="换一条练习">
+                    <span aria-hidden="true">↻</span>
+                    <span class="button-text">换一条</span>
+                </button>
+                <button class="theme-toggle" type="button" id="themeToggle" aria-label="切换深浅色" title="切换深浅色">☾</button>
             </div>
         </div>
+    </header>
 
-        <!-- 优化后的主要内容 -->
-        <div class="main-content">
-            <h1 class="main-title">七大灵性法则</h1>
-
-            <div class="laws-grid">
-                <!-- 第一个法则 -->
-                <div class="law-card">
-                    <div class="law-number">1</div>
-                    <h2 class="law-title">纯粹潜能法则</h2>
-                    <div class="practices-list">
-                        <div class="practice-item">
-                            <div class="practice-title">保持静默</div>
-                            <div class="practice-content">我每天会花时间进入完全"心无杂念"的静默状态，以此探寻纯粹潜能的场域。我还会独自静坐冥想，每天至少两次，早晚各约三十分钟。</div>
-                        </div>
-                        <div class="practice-item">
-                            <div class="practice-title">与大自然交流</div>
-                            <div class="practice-content">我每天都会与大自然对话，静静见证万物蕴含的智慧。在静默的喜悦中，通过与大自然的交流，享受生命的脉动、无边的创造力和纯粹潜能的境界。</div>
-                        </div>
-                        <div class="practice-item">
-                            <div class="practice-title">练习不批判</div>
-                            <div class="practice-content">每天一开始，我都会对自己说："今天我不会批判任何发生的事。"随后，在一整天里不断提醒自己不要加以评判。</div>
-                        </div>
+    <main id="top">
+        <section class="hero" aria-labelledby="pageTitle">
+            <div class="hero-inner">
+                <div class="hero-copy">
+                    <div class="eyebrow">每日静观</div>
+                    <h1 id="pageTitle">七大灵性法则</h1>
+                    <p class="hero-lede">把抽象的灵性原则收束成每天可实践的三个动作：安静、选择、给予、接纳、意图、超然与服务。</p>
+                    <div class="hero-meta" aria-label="页面摘要">
+                        <span class="meta-pill">7 条法则</span>
+                        <span class="meta-pill">21 个练习</span>
+                        <span class="meta-pill">每日随机日课</span>
                     </div>
                 </div>
 
-                <!-- 第二个法则 -->
-                <div class="law-card">
-                    <div class="law-number">2</div>
-                    <h2 class="law-title">施予法则</h2>
-                    <div class="practices-list">
-                        <div class="practice-item">
-                            <div class="practice-title">随身携带礼物</div>
-                            <div class="practice-content">无论去到哪里，无论遇到谁，我都将带给对方一份礼物——可能是赞美、花朵或一句祈祷。今天，无论接触到谁，我都会这样做，从而开启生命中喜悦、财富与富饶的循环。</div>
-                        </div>
-                        <div class="practice-item">
-                            <div class="practice-title">感恩接受</div>
-                            <div class="practice-content">我会满怀感激地接受生命赐予我的一切礼物：阳光与鸟鸣、春雨或冬日初雪。我也会敞开心扉去接受他人的礼物，无论是实质的、金钱的，还是赞美与祈祷。</div>
-                        </div>
-                        <div class="practice-item">
-                            <div class="practice-title">给予与接纳爱</div>
-                            <div class="practice-content">我承诺通过给予和接纳生命中最珍贵的礼物——关怀、情感、欣赏与爱——来保持生命中永不停歇的富足循环。每当遇到某个人，我都会默默地祝愿他幸福、喜悦与欢笑。</div>
-                        </div>
+                <article class="daily-panel" aria-live="polite">
+                    <div class="daily-panel-header">
+                        <span class="daily-label">今日练习</span>
+                        <span class="daily-count" id="dailyCount">1 / 21</span>
                     </div>
-                </div>
-
-                <!-- 第三个法则 -->
-                <div class="law-card">
-                    <div class="law-number">3</div>
-                    <h2 class="law-title">因果法则</h2>
-                    <div class="practices-list">
-                        <div class="practice-item">
-                            <div class="practice-title">见证每一次选择</div>
-                            <div class="practice-content">今天我会有意识地觉察自己每时每刻所做的选择。我知道，为未来做好准备的最佳方法，就是充分觉察当下。</div>
+                    <div class="daily-body" id="dailyBody">
+                        <div class="daily-law" id="dailyLaw">纯粹潜能法则</div>
+                        <h2 class="daily-title" id="dailyTitle">保持静默</h2>
+                        <p class="daily-quote" id="dailyQuote">我每天会花时间进入完全“心无杂念”的静默状态，以此探寻纯粹潜能的场域。我还会独自静坐冥想，每天至少两次，早晚各约三十分钟。</p>
+                        <div class="daily-footer">
+                            <button class="quiet-button" type="button" id="nextDailyButton">
+                                <span aria-hidden="true">↻</span>
+                                <span class="button-text">换一条练习</span>
+                            </button>
+                            <span class="daily-count" id="roundCount">本轮剩余 20 条</span>
                         </div>
-                        <div class="practice-item">
-                            <div class="practice-title">自问后果与幸福</div>
-                            <div class="practice-content">每当做出选择时，我会问自己："这个选择会带来什么后果？它会为我和受到影响的人创造幸福与满足吗？"</div>
-                        </div>
-                        <div class="practice-item">
-                            <div class="practice-title">听从内心指引</div>
-                            <div class="practice-content">我会以内心的舒适或不适感作为准则：若感到舒适，便毫不犹豫地行动；若感到不适，则停下来，用心观察行为及其后果。如此引导，我能自然而然地为自己和他人做出正确的选择。</div>
-                        </div>
+                        <div class="law-tabs" id="lawTabs" aria-label="选择法则"></div>
                     </div>
-                </div>
-
-                <!-- 第四个法则 -->
-                <div class="law-card">
-                    <div class="law-number">4</div>
-                    <h2 class="law-title">最省力法则</h2>
-                    <div class="practices-list">
-                        <div class="practice-item">
-                            <div class="practice-title">全面接纳</div>
-                            <div class="practice-content">今天我会接纳所有人、所有事、环境以及发生的一切。我明白"此时此刻本该如此"，因为宇宙就是如此。我不与当下抗争，而是整体地接纳一切事物的本来面貌，而非我所希望的样子。</div>
-                        </div>
-                        <div class="practice-item">
-                            <div class="practice-title">对处境负责</div>
-                            <div class="practice-content">在接纳一切本来面貌后，我会对自己的处境以及所有被视为问题的事件负责。我知道，"负责"并不意味着责怪任何人或任何事，包括自己。我也知道，每一个问题都蕴藏着转化为更大利益的机会。</div>
-                        </div>
-                        <div class="practice-item">
-                            <div class="practice-title">不设防地觉察</div>
-                            <div class="practice-content">今天我将"不设防"地觉察。我不再需要捍卫自己的观点，也无需说服或劝说他人接受我的看法。我会对所有观点保持开放，不固执于任何一种。</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 第五个法则 -->
-                <div class="law-card">
-                    <div class="law-number">5</div>
-                    <h2 class="law-title">意图与愿望法则</h2>
-                    <div class="practices-list">
-                        <div class="practice-item">
-                            <div class="practice-title">随身携带愿望清单</div>
-                            <div class="practice-content">我会列出自己所有的愿望，并随身携带：在进入静默与冥想前、在每晚入睡前、在清晨醒来时，都要查看这份清单。</div>
-                        </div>
-                        <div class="practice-item">
-                            <div class="practice-title">交托创造的沃土</div>
-                            <div class="practice-content">我将把愿望交给创造的沃土，相信若事情未按我的意愿进行，一定有其原因，并且宇宙为我制定的计划，远比我能想象的更加宏大。</div>
-                        </div>
-                        <div class="practice-item">
-                            <div class="practice-title">当下觉察与显化</div>
-                            <div class="practice-content">我会不断提醒自己，在做任何事时都要练习当下觉察。我拒绝让任何障碍消耗或分散我对当下的注意力。我接纳当下的本来面貌，并通过最深、最珍贵的意图与愿望来显化未来。</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 第六个法则 -->
-                <div class="law-card">
-                    <div class="law-number">6</div>
-                    <h2 class="law-title">超然法则</h2>
-                    <div class="practices-list">
-                        <div class="practice-item">
-                            <div class="practice-title">致力于超然</div>
-                            <div class="practice-content">今天我将致力于超然。我会允许自己和身边的人拥有做自己的自由；不会固执地强加对事情发展的看法，也不会强迫解决问题而制造新的问题；我将以超然的心态参与每一件事。</div>
-                        </div>
-                        <div class="practice-item">
-                            <div class="practice-title">接纳无常</div>
-                            <div class="practice-content">我将把无常纳入人生体验的基本组成。只要愿意接受无常，答案会自然而然地从困惑与混乱中显现。事情越显得无常，我就越感到安全，因为无常是通往自由的道路。借助无常的智慧，我将找到真正的安全感。</div>
-                        </div>
-                        <div class="practice-item">
-                            <div class="practice-title">拥抱可能</div>
-                            <div class="practice-content">我将踏入各种可能的领域，在对无限选择保持开放的同时，期待各种激动与惊喜。当我进入各种可能时，我将体验生命的所有乐趣、冒险、魔力与神秘。</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 第七个法则 -->
-                <div class="law-card">
-                    <div class="law-number">7</div>
-                    <h2 class="law-title">达摩法则</h2>
-                    <div class="practices-list">
-                        <div class="practice-item">
-                            <div class="practice-title">培养神圣原型</div>
-                            <div class="practice-content">今天我将满怀爱意地培养藏在灵魂深处的神圣原型。我会关注自己内在的灵性，并赋予身体与心智以生命的灵性；我将唤醒内心的深沉静谧，在这有限的时光里怀抱超越时间、永恒存在的觉知。</div>
-                        </div>
-                        <div class="practice-item">
-                            <div class="practice-title">发挥独特天赋</div>
-                            <div class="practice-content">我会列出自己所有的独特天赋，以及能展现这些天赋并让我热爱的活动。当我用天赋造福他人时，我会忘却时间，从而创造自己生命的丰盛，也带来他人生命的富饶。</div>
-                        </div>
-                        <div class="practice-item">
-                            <div class="practice-title">服务众生</div>
-                            <div class="practice-content">我将每天自问："我如何才能造福众生？我能怎样帮助他人？"这些问题的答案，将指引我带着爱去帮助和造福我的同胞。</div>
-                        </div>
-                    </div>
-                </div>
+                </article>
             </div>
+        </section>
+
+        <section class="content-band" aria-labelledby="lawsTitle">
+            <div class="section-inner">
+                <div class="section-heading">
+                    <div>
+                        <div class="section-kicker">完整日课</div>
+                        <h2 class="section-title" id="lawsTitle">从原则到行动</h2>
+                    </div>
+                    <p class="section-note">每条法则保留三个具体练习，适合晨间选择一个重点，也适合晚上回看当天的心念与行动。</p>
+                </div>
+
+                <div class="laws-list" id="lawsList"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <span>七大灵性法则</span>
+            <span>安静地阅读，具体地练习。</span>
         </div>
-    </div>
+    </footer>
 
     <script>
-        // ===== 全局变量和数据 =====
-        const inspirations = [
+        const laws = [
             {
-                title: "保持静默",
-                content: "我每天会花时间进入完全\"心无杂念\"的静默状态，以此探寻纯粹潜能的场域。我还会独自静坐冥想，每天至少两次，早晚各约三十分钟。",
-                source: "《纯粹潜能法则》"
+                title: "纯粹潜能法则",
+                essence: "在静默、自然与不批判中，回到更自由的觉察。",
+                practices: [
+                    {
+                        title: "保持静默",
+                        content: "我每天会花时间进入完全“心无杂念”的静默状态，以此探寻纯粹潜能的场域。我还会独自静坐冥想，每天至少两次，早晚各约三十分钟。"
+                    },
+                    {
+                        title: "与大自然交流",
+                        content: "我每天都会与大自然对话，静静见证万物蕴含的智慧。在静默的喜悦中，通过与大自然的交流，享受生命的脉动、无边的创造力和纯粹潜能的境界。"
+                    },
+                    {
+                        title: "练习不批判",
+                        content: "每天一开始，我都会对自己说：“今天我不会批判任何发生的事。”随后，在一整天里不断提醒自己不要加以评判。"
+                    }
+                ]
             },
             {
-                title: "与大自然交流",
-                content: "我每天都会与大自然对话，静静见证万物蕴含的智慧。在静默的喜悦中，通过与大自然的交流，享受生命的脉动、无边的创造力和纯粹潜能的境界。",
-                source: "《纯粹潜能法则》"
+                title: "施予法则",
+                essence: "让给予和接纳保持流动，生命的丰盛才会循环。",
+                practices: [
+                    {
+                        title: "随身携带礼物",
+                        content: "无论去到哪里，无论遇到谁，我都将带给对方一份礼物，可能是赞美、花朵或一句祈祷。今天，无论接触到谁，我都会这样做，从而开启生命中喜悦、财富与富饶的循环。"
+                    },
+                    {
+                        title: "感恩接受",
+                        content: "我会满怀感激地接受生命赐予我的一切礼物：阳光与鸟鸣、春雨或冬日初雪。我也会敞开心扉去接受他人的礼物，无论是实质的、金钱的，还是赞美与祈祷。"
+                    },
+                    {
+                        title: "给予与接纳爱",
+                        content: "我承诺通过给予和接纳生命中最珍贵的礼物，关怀、情感、欣赏与爱，来保持生命中永不停歇的富足循环。每当遇到某个人，我都会默默地祝愿他幸福、喜悦与欢笑。"
+                    }
+                ]
             },
             {
-                title: "练习不批判",
-                content: "每天一开始，我都会对自己说:\"今天我不会批判任何发生的事。\"随后，在一整天里不断提醒自己不要加以评判。",
-                source: "《纯粹潜能法则》"
+                title: "因果法则",
+                essence: "每一个选择都会成为未来，所以先觉察，再行动。",
+                practices: [
+                    {
+                        title: "见证每一次选择",
+                        content: "今天我会有意识地觉察自己每时每刻所做的选择。我知道，为未来做好准备的最佳方法，就是充分觉察当下。"
+                    },
+                    {
+                        title: "自问后果与幸福",
+                        content: "每当做出选择时，我会问自己：“这个选择会带来什么后果？它会为我和受到影响的人创造幸福与满足吗？”"
+                    },
+                    {
+                        title: "听从内心指引",
+                        content: "我会以内心的舒适或不适感作为准则：若感到舒适，便毫不犹豫地行动；若感到不适，则停下来，用心观察行为及其后果。如此引导，我能自然而然地为自己和他人做出正确的选择。"
+                    }
+                ]
             },
             {
-                title: "随身携带礼物",
-                content: "无论去到哪里，无论遇到谁，我都将带给对方一份礼物——可能是赞美、花朵或一句祈祷。今天，无论接触到谁，我都会这样做，从而开启生命中喜悦、财富与富饶的循环。",
-                source: "《施予法则》"
+                title: "最省力法则",
+                essence: "先接纳当下，再用不设防的心看见更省力的路径。",
+                practices: [
+                    {
+                        title: "全面接纳",
+                        content: "今天我会接纳所有人、所有事、环境以及发生的一切。我明白“此时此刻本该如此”，因为宇宙就是如此。我不与当下抗争，而是整体地接纳一切事物的本来面貌，而非我所希望的样子。"
+                    },
+                    {
+                        title: "对处境负责",
+                        content: "在接纳一切本来面貌后，我会对自己的处境以及所有被视为问题的事件负责。我知道，“负责”并不意味着责怪任何人或任何事，包括自己。我也知道，每一个问题都蕴藏着转化为更大利益的机会。"
+                    },
+                    {
+                        title: "不设防地觉察",
+                        content: "今天我将“不设防”地觉察。我不再需要捍卫自己的观点，也无需说服或劝说他人接受我的看法。我会对所有观点保持开放，不固执于任何一种。"
+                    }
+                ]
             },
             {
-                title: "感恩接受",
-                content: "我会满怀感激地接受生命赐予我的一切礼物：阳光与鸟鸣、春雨或冬日初雪。我也会敞开心扉去接受他人的礼物，无论是实质的、金钱的，还是赞美与祈祷。",
-                source: "《施予法则》"
+                title: "意图与愿望法则",
+                essence: "清楚地看见愿望，也把结果交还给更大的创造。",
+                practices: [
+                    {
+                        title: "随身携带愿望清单",
+                        content: "我会列出自己所有的愿望，并随身携带：在进入静默与冥想前、在每晚入睡前、在清晨醒来时，都要查看这份清单。"
+                    },
+                    {
+                        title: "交托创造的沃土",
+                        content: "我将把愿望交给创造的沃土，相信若事情未按我的意愿进行，一定有其原因，并且宇宙为我制定的计划，远比我能想象的更加宏大。"
+                    },
+                    {
+                        title: "当下觉察与显化",
+                        content: "我会不断提醒自己，在做任何事时都要练习当下觉察。我拒绝让任何障碍消耗或分散我对当下的注意力。我接纳当下的本来面貌，并通过最深、最珍贵的意图与愿望来显化未来。"
+                    }
+                ]
             },
             {
-                title: "给予与接纳爱",
-                content: "我承诺通过给予和接纳生命中最珍贵的礼物——关怀、情感、欣赏与爱——来保持生命中永不停歇的富足循环。每当遇到某个人，我都会默默地祝愿他幸福、喜悦与欢笑。",
-                source: "《施予法则》"
+                title: "超然法则",
+                essence: "不固着于唯一答案，才有空间进入更多可能。",
+                practices: [
+                    {
+                        title: "致力于超然",
+                        content: "今天我将致力于超然。我会允许自己和身边的人拥有做自己的自由；不会固执地强加对事情发展的看法，也不会强迫解决问题而制造新的问题；我将以超然的心态参与每一件事。"
+                    },
+                    {
+                        title: "接纳无常",
+                        content: "我将把无常纳入人生体验的基本组成。只要愿意接受无常，答案会自然而然地从困惑与混乱中显现。事情越显得无常，我就越感到安全，因为无常是通往自由的道路。借助无常的智慧，我将找到真正的安全感。"
+                    },
+                    {
+                        title: "拥抱可能",
+                        content: "我将踏入各种可能的领域，在对无限选择保持开放的同时，期待各种激动与惊喜。当我进入各种可能时，我将体验生命的所有乐趣、冒险、魔力与神秘。"
+                    }
+                ]
             },
             {
-                title: "见证每一次选择",
-                content: "今天我会有意识地觉察自己每时每刻所做的选择。我知道，为未来做好准备的最佳方法，就是充分觉察当下。",
-                source: "《因果法则》"
-            },
-            {
-                title: "自问后果与幸福",
-                content: "每当做出选择时，我会问自己:\"这个选择会带来什么后果？它会为我和受到影响的人创造幸福与满足吗？\"",
-                source: "《因果法则》"
-            },
-            {
-                title: "听从内心指引",
-                content: "我会以内心的舒适或不适感作为准则：若感到舒适，便毫不犹豫地行动；若感到不适，则停下来，用心观察行为及其后果。如此引导，我能自然而然地为自己和他人做出正确的选择。",
-                source: "《因果法则》"
-            },
-            {
-                title: "全面接纳",
-                content: "今天我会接纳所有人、所有事、环境以及发生的一切。我明白\"此时此刻本该如此\"，因为宇宙就是如此。我不与当下抗争，而是整体地接纳一切事物的本来面貌，而非我所希望的样子。",
-                source: "《最省力法则》"
-            },
-            {
-                title: "对处境负责",
-                content: "在接纳一切本来面貌后，我会对自己的处境以及所有被视为问题的事件负责。我知道，\"负责\"并不意味着责怪任何人或任何事，包括自己。我也知道，每一个问题都蕴藏着转化为更大利益的机会。",
-                source: "《最省力法则》"
-            },
-            {
-                title: "不设防地觉察",
-                content: "今天我将\"不设防\"地觉察。我不再需要捍卫自己的观点，也无需说服或劝说他人接受我的看法。我会对所有观点保持开放，不固执于任何一种。",
-                source: "《最省力法则》"
-            },
-            {
-                title: "随身携带愿望清单",
-                content: "我会列出自己所有的愿望，并随身携带：在进入静默与冥想前、在每晚入睡前、在清晨醒来时，都要查看这份清单。",
-                source: "《意图与愿望法则》"
-            },
-            {
-                title: "交托创造的沃土",
-                content: "我将把愿望交给创造的沃土，相信若事情未按我的意愿进行，一定有其原因，并且宇宙为我制定的计划，远比我能想象的更加宏大。",
-                source: "《意图与愿望法则》"
-            },
-            {
-                title: "当下觉察与显化",
-                content: "我会不断提醒自己，在做任何事时都要练习当下觉察。我拒绝让任何障碍消耗或分散我对当下的注意力。我接纳当下的本来面貌，并通过最深、最珍贵的意图与愿望来显化未来。",
-                source: "《意图与愿望法则》"
-            },
-            {
-                title: "致力于超然",
-                content: "今天我将致力于超然。我会允许自己和身边的人拥有做自己的自由；不会固执地强加对事情发展的看法，也不会强迫解决问题而制造新的问题；我将以超然的心态参与每一件事。",
-                source: "《超然法则》"
-            },
-            {
-                title: "接纳无常",
-                content: "我将把无常纳入人生体验的基本组成。只要愿意接受无常，答案会自然而然地从困惑与混乱中显现。事情越显得无常，我就越感到安全，因为无常是通往自由的道路。借助无常的智慧，我将找到真正的安全感。",
-                source: "《超然法则》"
-            },
-            {
-                title: "拥抱可能",
-                content: "我将踏入各种可能的领域，在对无限选择保持开放的同时，期待各种激动与惊喜。当我进入各种可能时，我将体验生命的所有乐趣、冒险、魔力与神秘。",
-                source: "《超然法则》"
-            },
-            {
-                title: "培养神圣原型",
-                content: "今天我将满怀爱意地培养藏在灵魂深处的神圣原型。我会关注自己内在的灵性，并赋予身体与心智以生命的灵性；我将唤醒内心的深沉静谧，在这有限的时光里怀抱超越时间、永恒存在的觉知。",
-                source: "《达摩法则》"
-            },
-            {
-                title: "发挥独特天赋",
-                content: "我会列出自己所有的独特天赋，以及能展现这些天赋并让我热爱的活动。当我用天赋造福他人时，我会忘却时间，从而创造自己生命的丰盛，也带来他人生命的富饶。",
-                source: "《达摩法则》"
-            },
-            {
-                title: "服务众生",
-                content: "我将每天自问:\"我如何才能造福众生？我能怎样帮助他人？\"这些问题的答案，将指引我带着爱去帮助和造福我的同胞。",
-                source: "《达摩法则》"
+                title: "达摩法则",
+                essence: "看见自己的天赋，并把它用于服务他人。",
+                practices: [
+                    {
+                        title: "培养神圣原型",
+                        content: "今天我将满怀爱意地培养藏在灵魂深处的神圣原型。我会关注自己内在的灵性，并赋予身体与心智以生命的灵性；我将唤醒内心的深沉静谧，在这有限的时光里怀抱超越时间、永恒存在的觉知。"
+                    },
+                    {
+                        title: "发挥独特天赋",
+                        content: "我会列出自己所有的独特天赋，以及能展现这些天赋并让我热爱的活动。当我用天赋造福他人时，我会忘却时间，从而创造自己生命的丰盛，也带来他人生命的富饶。"
+                    },
+                    {
+                        title: "服务众生",
+                        content: "我将每天自问：“我如何才能造福众生？我能怎样帮助他人？”这些问题的答案，将指引我带着爱去帮助和造福我的同胞。"
+                    }
+                ]
             }
         ];
 
-        let currentTheme = 'light';
-        let remainingInCurrentRound = []; // 当前回合剩余的内容索引
-        let currentInspirationIndex = -1;  // 当前显示的内容索引
-        let autoRotationInterval = null;
-
-        // ===== 核心轮播逻辑 =====
-        
-        // 初始化新回合 - 重新填充剩余内容池
-        function initializeNewRound() {
-            remainingInCurrentRound = inspirations.map((_, index) => index);
-            console.log('新回合开始，包含21条内容');
-        }
-
-        // 从剩余池中随机选择一个内容
-        function getNextRandomInspiration() {
-            // 如果剩余池为空，开始新回合
-            if (remainingInCurrentRound.length === 0) {
-                initializeNewRound();
-            }
-
-            // 从剩余池中随机选择一个索引
-            const randomIndex = Math.floor(Math.random() * remainingInCurrentRound.length);
-            const selectedIndex = remainingInCurrentRound[randomIndex];
-            
-            // 从剩余池中移除已选择的索引
-            remainingInCurrentRound.splice(randomIndex, 1);
-            
-            currentInspirationIndex = selectedIndex;
-            
-            console.log(`选择了第${selectedIndex + 1}条内容，剩余${remainingInCurrentRound.length}条`);
-            
-            return inspirations[selectedIndex];
-        }
-
-        // 显示当前启发内容
-        function displayCurrentInspiration() {
-            const inspirationTitle = document.getElementById('inspirationTitle');
-            const inspirationContent = document.getElementById('inspirationContent');
-            const inspirationSource = document.getElementById('inspirationSource');
-            const progressText = document.getElementById('progressText');
-            
-            if (!inspirationTitle || !inspirationContent || !inspirationSource || !progressText) return;
-            
-            const inspiration = getNextRandomInspiration();
-            
-            // 添加淡出效果
-            inspirationContent.style.opacity = '0';
-            
-            setTimeout(() => {
-                inspirationTitle.textContent = inspiration.title;
-                inspirationContent.textContent = inspiration.content;
-                inspirationSource.textContent = '—' + inspiration.source;
-                
-                // 更新进度显示
-                const totalShown = inspirations.length - remainingInCurrentRound.length;
-                progressText.textContent = `第 ${totalShown} 条 / 共 ${inspirations.length} 条`;
-                
-                // 添加淡入效果
-                inspirationContent.style.animation = 'none';
-                inspirationContent.offsetHeight; // 触发重排
-                inspirationContent.style.animation = 'fadeInUp 1s ease forwards';
-            }, 300);
-        }
-
-        // ===== 全局函数（可被HTML调用）=====
-        
-        // 主题切换功能
-        function toggleTheme() {
-            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-            document.body.classList.toggle('dark-mode');
-            
-            const themeToggle = document.getElementById('themeToggle');
-            if (themeToggle) {
-                themeToggle.textContent = currentTheme === 'light' ? '🌙' : '☀️';
-            }
-            
-            // 保存主题设置
-            localStorage.setItem('theme', currentTheme);
-        }
-
-        // 手动显示随机启发内容（用于按钮点击）
-        function showRandomInspiration() {
-            // 立即显示下一个内容，并重置自动轮播计时器
-            displayCurrentInspiration();
-            startAutoRotation();
-        }
-
-        // ===== 辅助函数 =====
-        
-        // 根据时间自动设置主题
-        function detectTimeAndSetTheme() {
-            const hour = new Date().getHours();
-            const isDarkTime = hour >= 18 || hour <= 6;
-            
-            if (isDarkTime && currentTheme === 'light') {
-                toggleTheme();
-            }
-        }
-
-        // 自动轮播启发内容
-        function startAutoRotation() {
-            if (autoRotationInterval) {
-                clearInterval(autoRotationInterval);
-            }
-            
-            autoRotationInterval = setInterval(() => {
-                displayCurrentInspiration();
-            }, 15000);
-        }
-
-        // 创建装饰性浮动元素
-        function createFloatingElements() {
-            const container = document.getElementById('floatingElements');
-            if (!container) return;
-            
-            const elementCount = 6;
-            
-            for (let i = 0; i < elementCount; i++) {
-                const element = document.createElement('div');
-                element.className = 'floating-element';
-                element.style.left = Math.random() * 100 + '%';
-                element.style.top = Math.random() * 100 + '%';
-                element.style.animationDelay = Math.random() * 6 + 's';
-                element.style.animationDuration = (6 + Math.random() * 4) + 's';
-                container.appendChild(element);
-            }
-        }
-
-        // 初始化页面
-        function initializePage() {
-            detectTimeAndSetTheme();
-            createFloatingElements();
-            
-            // 初始化轮播系统
-            initializeNewRound();
-            
-            setTimeout(() => {
-                displayCurrentInspiration();
-                startAutoRotation();
-            }, 100);
-        }
-
-        // 页面初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme) {
-                currentTheme = savedTheme;
-                if (currentTheme === 'dark') {
-                    document.body.classList.add('dark-mode');
-                    const themeToggle = document.getElementById('themeToggle');
-                    if (themeToggle) {
-                        themeToggle.textContent = '☀️';
-                    }
-                }
-            }
-            
-            initializePage();
-            setInterval(detectTimeAndSetTheme, 3600000);
+        const allPractices = laws.flatMap((law, lawIndex) => {
+            return law.practices.map((practice, practiceIndex) => ({
+                ...practice,
+                lawTitle: law.title,
+                lawIndex,
+                practiceIndex,
+                globalIndex: lawIndex * 3 + practiceIndex
+            }));
         });
-        
-        // 全局函数
-        window.toggleTheme = toggleTheme;
-        window.showRandomInspiration = showRandomInspiration;
-    </script>
 
+        let remainingIndexes = [];
+        let activeIndex = 0;
+
+        const dailyBody = document.getElementById("dailyBody");
+        const dailyLaw = document.getElementById("dailyLaw");
+        const dailyTitle = document.getElementById("dailyTitle");
+        const dailyQuote = document.getElementById("dailyQuote");
+        const dailyCount = document.getElementById("dailyCount");
+        const roundCount = document.getElementById("roundCount");
+        const lawTabs = document.getElementById("lawTabs");
+        const lawsList = document.getElementById("lawsList");
+        const themeToggle = document.getElementById("themeToggle");
+
+        function getDailyIndex() {
+            const start = new Date(new Date().getFullYear(), 0, 0);
+            const day = Math.floor((new Date() - start) / 86400000);
+            return day % allPractices.length;
+        }
+
+        function resetRound(excludeIndex) {
+            remainingIndexes = allPractices
+                .map((_, index) => index)
+                .filter((index) => index !== excludeIndex);
+        }
+
+        function updateDaily(index) {
+            activeIndex = index;
+            const item = allPractices[index];
+
+            dailyLaw.textContent = item.lawTitle;
+            dailyTitle.textContent = item.title;
+            dailyQuote.textContent = item.content;
+            dailyCount.textContent = `${index + 1} / ${allPractices.length}`;
+            roundCount.textContent = `本轮剩余 ${remainingIndexes.length} 条`;
+
+            dailyBody.classList.remove("fade-in");
+            void dailyBody.offsetWidth;
+            dailyBody.classList.add("fade-in");
+
+            document.querySelectorAll(".law-tab").forEach((tab) => {
+                tab.classList.toggle("is-active", Number(tab.dataset.lawIndex) === item.lawIndex);
+            });
+        }
+
+        function showNextPractice() {
+            if (remainingIndexes.length === 0) {
+                resetRound(activeIndex);
+            }
+
+            const poolPosition = Math.floor(Math.random() * remainingIndexes.length);
+            const nextIndex = remainingIndexes.splice(poolPosition, 1)[0];
+            updateDaily(nextIndex);
+        }
+
+        function showPracticeFromLaw(lawIndex) {
+            const firstPracticeIndex = lawIndex * 3;
+            remainingIndexes = remainingIndexes.filter((index) => index !== firstPracticeIndex);
+            updateDaily(firstPracticeIndex);
+        }
+
+        function renderLawTabs() {
+            lawTabs.innerHTML = laws.map((law, index) => `
+                <button class="law-tab" type="button" data-law-index="${index}" title="${law.title}" aria-label="${law.title}">
+                    ${index + 1}
+                </button>
+            `).join("");
+
+            lawTabs.addEventListener("click", (event) => {
+                const tab = event.target.closest(".law-tab");
+                if (!tab) return;
+                showPracticeFromLaw(Number(tab.dataset.lawIndex));
+            });
+        }
+
+        function renderLaws() {
+            lawsList.innerHTML = laws.map((law, lawIndex) => `
+                <article class="law-detail" id="law-${lawIndex + 1}">
+                    <div class="law-summary">
+                        <div class="law-index">第 ${lawIndex + 1} 法则</div>
+                        <h3 class="law-name">${law.title}</h3>
+                        <p class="law-essence">${law.essence}</p>
+                    </div>
+                    <div class="practice-grid">
+                        ${law.practices.map((practice, practiceIndex) => `
+                            <section class="practice-card">
+                                <div class="practice-step">练习 ${practiceIndex + 1}</div>
+                                <h4 class="practice-title">${practice.title}</h4>
+                                <p class="practice-content">${practice.content}</p>
+                            </section>
+                        `).join("")}
+                    </div>
+                </article>
+            `).join("");
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.dataset.theme = theme;
+            themeToggle.textContent = theme === "dark" ? "☼" : "☾";
+            localStorage.setItem("theme", theme);
+        }
+
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem("theme");
+            const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+            applyTheme(savedTheme || (prefersDark ? "dark" : "light"));
+        }
+
+        document.getElementById("nextDailyButton").addEventListener("click", showNextPractice);
+        document.getElementById("nextHeaderButton").addEventListener("click", showNextPractice);
+        themeToggle.addEventListener("click", () => {
+            const currentTheme = document.documentElement.dataset.theme || "light";
+            applyTheme(currentTheme === "dark" ? "light" : "dark");
+        });
+
+        initializeTheme();
+        renderLawTabs();
+        renderLaws();
+
+        const initialIndex = getDailyIndex();
+        resetRound(initialIndex);
+        updateDaily(initialIndex);
+    </script>
 </body>
 </html>
