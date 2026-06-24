@@ -97,15 +97,12 @@
         }
 
         .brand-mark {
-            display: grid;
             width: 34px;
             height: 34px;
-            place-items: center;
             border: 1px solid var(--line-strong);
             border-radius: 50%;
-            color: var(--gold);
-            font-size: 1rem;
-            line-height: 1;
+            object-fit: cover;
+            display: block;
         }
 
         .brand-text {
@@ -661,7 +658,7 @@
     <header class="site-header">
         <div class="header-inner">
             <a class="brand" href="#top" aria-label="七大灵性法则">
-                <span class="brand-mark" aria-hidden="true">七</span>
+                <img class="brand-mark" src="assets/apple-touch-icon.png" alt="" aria-hidden="true">
                 <span class="brand-text">
                     <span class="brand-title">七大灵性法则</span>
                     <span class="brand-subtitle">Seven Spiritual Laws</span>
