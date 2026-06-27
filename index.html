@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dusk">
+<html lang="zh-CN" data-theme="dawn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,7 +57,7 @@
     animation:breathe 12s ease-in-out infinite}
   @keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(.92);opacity:.55}
     50%{transform:translate(-50%,-50%) scale(1.14);opacity:.95}}
-  .today > *{position:relative;z-index:1}
+  .today > *:not(.glow){position:relative;z-index:1}
 
   .eyebrow{display:flex;align-items:center;justify-content:center;gap:14px;
     margin-bottom:30px;font-size:13px;letter-spacing:.14em;color:var(--ink3)}
@@ -89,57 +89,10 @@
   .pitem .pt{font-weight:500;font-size:1.18rem;letter-spacing:.05em;margin-bottom:11px;color:var(--ink)}
   .pitem .pb{font-size:1.08rem;font-weight:300;line-height:1.92;color:var(--ink)}
 
-  /* ---- week ---- */
-  .sec{padding:54px 0;border-top:1px solid var(--line)}
-  .sec-head{font-size:13px;letter-spacing:.26em;color:var(--ink3);margin-bottom:8px}
-  .sec-sub{font-size:1.02rem;color:var(--ink2);font-weight:300;margin-bottom:30px;line-height:1.8}
-  .week{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory}
-  .week::-webkit-scrollbar{height:0}
-  .cell{flex:1 0 80px;scroll-snap-align:start;text-align:center;padding:16px 6px 18px;
-    border:1px solid var(--line);border-radius:12px;cursor:pointer;background:var(--raised);
-    transition:.3s;position:relative}
-  .cell:hover{border-color:var(--line2)}
-  .cell[data-breath="in"]{--c:var(--in);--cs:var(--in-soft)}
-  .cell[data-breath="out"]{--c:var(--out);--cs:var(--out-soft)}
-  .cell.sel{background:var(--cs);border-color:var(--c)}
-  .cell.today::after{content:"";position:absolute;top:8px;right:8px;width:5px;height:5px;
-    border-radius:50%;background:var(--c)}
-  .cell .d{font-size:12px;letter-spacing:.1em;color:var(--ink3);margin-bottom:9px}
-  .cell .w{font-weight:500;font-size:1.18rem;color:var(--ink);margin-bottom:8px}
-  .cell .n{font-family:"Cormorant",serif;font-size:13px;letter-spacing:.1em;color:var(--c)}
-  .legend{display:flex;gap:22px;margin-top:20px;font-size:12px;letter-spacing:.12em;color:var(--ink3)}
-  .legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;
-    vertical-align:middle}
-  .legend .ci{background:var(--in)}
-  .legend .co{background:var(--out)}
-
-  /* ---- structure ---- */
-  .struct{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
-  .breath{border:1px solid var(--line);border-radius:14px;padding:24px 22px;background:var(--raised)}
-  .breath.in{--c:var(--in)} .breath.out{--c:var(--out)}
-  .breath h3{font-weight:500;font-size:1.15rem;letter-spacing:.16em;color:var(--c);margin-bottom:4px}
-  .breath .ph{font-size:12px;letter-spacing:.22em;color:var(--ink3);margin-bottom:20px}
-  .root{margin-bottom:18px}
-  .root:last-child{margin-bottom:0}
-  .root b{font-weight:500;font-size:1rem;color:var(--ink);letter-spacing:.08em}
-  .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
-  .tag{font-size:12.5px;letter-spacing:.06em;color:var(--ink2);border:1px solid var(--line2);
-    border-radius:20px;padding:4px 11px}
-  .closing{margin-top:24px;font-size:1.05rem;font-weight:300;color:var(--ink2);
-    line-height:1.85;text-align:center}
-  .closing em{font-style:normal;color:var(--ink);border-bottom:1px solid var(--accent,var(--ink3))}
-
-  footer{padding:44px 0 56px;border-top:1px solid var(--line);text-align:center}
-  footer .tag-line{font-size:1.05rem;font-weight:300;color:var(--ink2);letter-spacing:.06em}
-  footer .lat{font-family:"Cormorant",serif;font-style:italic;font-size:14px;
-    color:var(--ink3);margin-top:10px;letter-spacing:.04em}
-
-  a:focus-visible,button:focus-visible,.cell:focus-visible{outline:2px solid var(--in);outline-offset:3px}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--in);outline-offset:3px}
   @media (prefers-reduced-motion:reduce){.glow{animation:none;opacity:.7}}
   @media (max-width:560px){
-    .struct{grid-template-columns:1fr}
     .today{padding:48px 0 44px}
-    .cell{flex-basis:72px}
   }
 </style>
 </head>
@@ -152,7 +105,7 @@
       <b>七大灵性法则</b>
       <span class="lat">Seven Spiritual Laws</span>
     </div>
-    <button class="theme" id="theme" aria-label="切换昼夜">☀</button>
+    <button class="theme" id="theme" aria-label="切换昼夜">☾</button>
   </header>
 
   <section class="today" id="today" data-breath="in" aria-live="polite">
@@ -171,39 +124,6 @@
       <div id="practices"></div>
     </div>
   </section>
-
-  <section class="sec">
-    <div class="sec-head">一周的呼吸</div>
-    <p class="sec-sub">每天专注一条，周日从源头起步，周六走完，下一周再回到周日。</p>
-    <div class="week" id="week"></div>
-    <div class="legend">
-      <span><i class="ci"></i>吸 · 向内（聚拢）</span>
-      <span><i class="co"></i>呼 · 向外（交付）</span>
-    </div>
-  </section>
-
-  <section class="sec">
-    <div class="sec-head">底层结构</div>
-    <p class="sec-sub">七条法则其实收束于四个根、一次呼吸。</p>
-    <div class="struct">
-      <div class="breath in">
-        <h3>吸</h3><div class="ph">向内 · 聚拢</div>
-        <div class="root"><b>静</b><div class="tags"><span class="tag">静默 · 纯粹潜能</span></div></div>
-        <div class="root"><b>立意抉择</b><div class="tags"><span class="tag">意图 · 意图愿望</span><span class="tag">选择 · 因果</span></div></div>
-      </div>
-      <div class="breath out">
-        <h3>呼</h3><div class="ph">向外 · 交付</div>
-        <div class="root"><b>放下</b><div class="tags"><span class="tag">接纳 · 最省力</span><span class="tag">超然 · 超然</span></div></div>
-        <div class="root"><b>利他</b><div class="tags"><span class="tag">给予 · 给予</span><span class="tag">服务 · 达摩</span></div></div>
-      </div>
-    </div>
-    <p class="closing">回到源头，升起一个方向，再把它连同结果一起交付出去——<br><em>向内立意，向外交付。</em></p>
-  </section>
-
-  <footer>
-    <div class="tag-line">安静地阅读，具体地练习。</div>
-    <div class="lat">read in silence, practice in particulars</div>
-  </footer>
 
 </div>
 
@@ -298,11 +218,6 @@
     eb.innerHTML = html;
     $("rand").onclick = pickRandom;
     const back = $("back"); if (back) back.onclick = goToday;
-
-    // week cells
-    [...document.querySelectorAll(".cell")].forEach((c, i) => {
-      c.classList.toggle("sel", i === sel && !random);
-    });
   }
 
   function goToday(){ sel = todayIdx; pi = 0; random = false; render(); }
@@ -311,18 +226,6 @@
     pi = Math.floor(Math.random() * LAWS[sel].practices.length);
     random = true; render();
   }
-
-  // build week strip
-  const week = $("week");
-  LAWS.forEach((L, i) => {
-    const c = document.createElement("button");
-    c.className = "cell" + (i === todayIdx ? " today" : "");
-    c.dataset.breath = L.breath;
-    c.innerHTML = '<div class="d">' + L.day + '</div><div class="w">' + L.word +
-      '</div><div class="n">' + L.num + '</div>';
-    c.onclick = () => { sel = i; pi = 0; random = false; render(); };
-    week.appendChild(c);
-  });
 
   $("theme").onclick = () => {
     const html = document.documentElement;
